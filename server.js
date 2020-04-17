@@ -1,40 +1,39 @@
-//Import all the dependency package
-const express = require("express");
-const mongoose = require("mongoose");
-const dotEnv = require("dotenv");
+const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
-// const authRouter = require("./server/route/auth");
-// const enquiryRouter = require("./server/route/manage");
+const path = require('path');
+const mongoose = require('mongoose');
+const users = require('./server/route/User/user');
 
-//Use the packages
+const port = 3000;
+
 const app = express();
-dotEnv.config();
 
-//Middleware
-app.use(express.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(express.static(path.join(__dirname, 'dist')));
+
+app.use(bodyParser.urlencoded({extended: true}));
+
 app.use(bodyParser.json());
-app.use(cors({
-  origin: 'http://localhost:4000'
-}));
-// app.use("/api/user", authRouter);
-// app.use("/api/manage", enquiryRouter);
+
+app.use('/api', users);
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist/mean-app/index.html'));
+});
+
+const db = 'mongodb://localhost:27017/pizza-ordering-system';
+mongoose.Promise = global.Promise;
 
 //Connect to DB
 mongoose.connect(
-  process.env.DB_CONNECT, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  },
-  () => {
-    console.log("Database is connected");
-  }
-);
+    db, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    },
+    () => {
+      console.log("Database is connected");
+    }
+  );
 
-//Start a server
-app.listen(4000, () => {
-  console.log("Server is running at port 4000");
-});
+app.listen(port, function() {
+    console.log('Server running on localhost:' + port)
+})
