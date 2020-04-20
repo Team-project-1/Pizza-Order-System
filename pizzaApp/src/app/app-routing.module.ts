@@ -9,15 +9,15 @@ import { AuthGuard } from './auth.guard';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/events',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
+  // {
+  //   path: 'events',
+  //   component: EventsComponent
+  // },
   {
-    path: 'events',
-    component: EventsComponent
-  },
-  {
-    path: 'special',
+    path: 'pizza',
     canActivate: [AuthGuard],
     component: SpecialEventsComponent
   },

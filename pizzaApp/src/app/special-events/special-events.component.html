@@ -3,11 +3,11 @@
       <div class="card text-center">
         <div class="card-body">
           <h5 class="card-title">{{event.name}}</h5>
-          <p class="card-text">{{event.description}}</p>
+          <p class="card-text">{{event.size}}</p>
           <a href="#" class="btn btn-success">Buy Tickets</a>
         </div>
         <div class="card-footer text-muted">
-          {{event.date | date:'shortDate'}}
+          {{event.price | currency:"INR"}}
         </div>
       </div>
     </div>
