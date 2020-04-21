@@ -4,6 +4,7 @@ const cors = require('cors')
 const path = require('path');
 
 const api = require('./routes/api');
+const pizza = require('./routes/pizzaapi');
 const port = 3000;
 
 const app = express();
@@ -12,7 +13,9 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use(bodyParser.json()); 
 
-app.use('/api', api);
+app.use('/api', api, pizza);
+
+//app.use('/api/', pizza);
 
 // app.get('*', (req, res) => {
 //   res.sendFile(path.join(__dirname, 'dist/index.html'));
