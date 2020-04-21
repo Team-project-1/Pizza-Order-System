@@ -1,28 +1,13 @@
-<!-- <div class="row mt-5">
-    <div class="col-md-3 mb-3" *ngFor="let event of specialEvents">
-      <div class="card text-center">
-        <div class="card-body">
-          <h5 class="card-title">{{event.name}}</h5>
-          <p class="card-text">{{event.size}}</p>
-          <a href="#" class="btn btn-success">Buy Tickets</a>
-        </div>
-        <div class="card-footer text-muted">
-          {{event.price | currency:"INR"}}
-        </div>
-      </div>
-    </div>
-  </div> -->
-
   <div class="row mt-5">
     <div class="col-md-4 mb-3" *ngFor="let event of specialEvents">
       <div class="card text-center" style="width: 18rem;">
-        <img class="card-img-top" style="height: 300px;" src={{event.image}} alt="Card image cap">
+        <img class="card-img-top" style="height: 250px;" src={{event.image}} alt="Card image cap">
         <div class="card-body">
           <h5 class="card-title">{{event.name}}</h5>
-          <p class="card-text">{{event.size}}</p>
+          <p class="card-text" style="font-weight: bolder;">{{event.size}}</p>
           <a href="#" class="btn btn-primary">Buy</a>
         </div>
-        <div class="card-footer text-muted">
+        <div class="card-footer text-muted" style="font-weight: bolder;">
           {{event.price | currency:"INR"}}
         </div>
       </div>
