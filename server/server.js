@@ -15,8 +15,6 @@ app.use(bodyParser.json());
 
 app.use('/api', api, pizza);
 
-//app.use('/api/', pizza);
-
 app.listen(port, function(){
     console.log("Server running on localhost:" + port);
 });
