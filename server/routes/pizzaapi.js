@@ -1,17 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const Pizza = require('../models/pizza');
-
-const db = "mongodb://localhost:27017/pizza-ordering-app";
-
-mongoose.connect(db, function(err){
-  if(err){
-      console.error('Error! ' + err)
-  } else {
-    console.log('Connected to mongodb')      
-  }
-});
 
 // API for adding Pizza Information
 
@@ -22,7 +11,8 @@ router.post('/addpizza', (req, res) => {
             message: "Pizza content can not be empty"
         });
     }
-  let pizzaData = req.body
+    if (req.body.role === "admin") {
+        let pizzaData = req.body
   let pizza = new Pizza(pizzaData)
   pizza.save((err) => {
     if (err) {
@@ -30,6 +20,9 @@ router.post('/addpizza', (req, res) => {
     }
     res.send('Pizza Added successfully')
   })
+    } else {
+        res.send("Only admin can create pizza");
+    }  
 })
 
 // API for getting information of all types of pizzas available in the store
@@ -48,81 +41,58 @@ router.get('/allpizzas', function(req, res) {
 
 // API for getting information of particular pizza by id
 
-router.get('pizza/:pizzaid', function(req, res) {
-    Pizza.findById(req.params.pizzaId)
-    .then(pizza => {
-        if(!pizza) {
-            return res.status(404).send({
-                message: "Pizza not found with id " + req.params.pizzaId
-            });            
+router.get('/pizza/:id', function(req, res) {
+    console.log('get request for a single pizza');
+    Pizza.findById(req.params.id)
+    .exec(function(err, pizza) {
+        if(err) {
+            console.log("Error retrieving pizza");
+        } else {
+            res.json(pizza)
         }
-        res.send(pizza);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Pizza not found with id " + req.params.pizzaId
-            });                
-        }
-        return res.status(500).send({
-            message: "Something wrong retrieving pizza with id " + req.params.pizzaId
-        })
     })
-})
+});
 
 // API for updating information of pizza
 
-router.get('pizza/:pizzaid', function(req, res) {
-    let pizzaData = req.body
-    if(!req.body) {
-        return res.status(400).send({
-            message: "Pizza content can not be empty"
+router.put('/pizza/:id', function(req, res) {
+    if (req.body.role === "admin") {
+        console.log("Update a pizza");
+    Pizza.findByIdAndUpdate(req.params.id, 
+        {
+            $set: {pizzaName: req.body.pizzaName, pizzaSize: req.body.pizzaSize, pizzaPrice: req.body.pizzaPrice}
+        },
+        {
+            new: true
+        },
+        function(err, updatedPizza) {
+            if(err) {
+                console.log("Error updating pizza")
+            } else {
+                res.json(updatedPizza)
+            }
         });
-    }
-
-    // Find and update pizza info with the request body
-    Pizza.findByIdAndUpdate(req.params.pizzaId, {
-        pizzaData
-    }, {new: true})
-    .then(pizza => {
-        if(!pizza) {
-            return res.status(404).send({
-                message: "Pizza not found with id " + req.params.pizzaId
-            });
-        }
-        res.send(pizza);
-    }).catch(err => {
-        if(err.kind === 'ObjectId') {
-            return res.status(404).send({
-                message: "Pizza not found with id " + req.params.pizzaId
-            });                
-        }
-        return res.status(500).send({
-            message: "Something wrong updating pizza with id " + req.params.pizzaId
-        })
-    })
-})
+    } else {
+        res.send("Only admin can create pizza");
+    }      
+});
 
 // Deleting pizza info with the specified pizzaId in the request
-router.get('pizza/:pizzaid', function(req, res) {
-    Pizza.findByIdAndRemove(req.params.pizzaId)
-    .then(pizza => {
-        if(!pizza) {
-            return res.status(404).send({
-                message: "Pizza not found with id " + req.params.pizzaId
-            });
+
+router.delete('/pizza/:id', function(req, res) {
+    if (req.body.role === "admin") {
+    console.log('Deleting a pizza');
+    Pizza.findByIdAndRemove(req.params.id, function(err, deletedPizza) {
+        if(err) {
+            res.send('Error deleting pizza')
+        } else {
+            res.json(deletedPizza)
         }
-        res.send({message: "Pizza info deleted successfully!"});
-    }).catch(err => {
-        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
-            return res.status(404).send({
-                message: "Pizza not found with id " + req.params.pizzaId
-            });                
-        }
-        return res.status(500).send({
-            message: "Could not delete pizza with id " + req.params.pizzaId
-        })
-    })
-})
+    });
+} else {
+    res.send("Only admin can create pizza");
+}  
+});
 
 
 module.exports = router;
