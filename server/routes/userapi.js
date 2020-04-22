@@ -73,7 +73,8 @@ router.post('/register', (req, res) => {
   let user = new User(userData)
   user.save((err, registeredUser) => {
     if (err) {
-      console.log(err)      
+      console.log(err.errmsg)
+      res.send(err.errmsg)      
     } else {
       let payload = {subject: registeredUser._id}
       let token = jwt.sign(payload, 'Pizza-Ordering-Systems-SecretKey')
@@ -87,12 +88,12 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
   let userData = req.body
-  User.findOne({name: userData.name}, (err, user) => {
+  User.findOne({name: userData.name, email: userData.email}, (err, user) => {
     if (err) {
       console.log(err)    
     } else {
       if (!user) {
-        res.status(401).send('Invalid username')
+        res.status(401).send('Invalid name or email')
       } else 
       if ( user.password !== userData.password) {
         res.status(401).send('Invalid Password')
@@ -105,5 +106,24 @@ router.post('/login', (req, res) => {
   })
 })
 // --------------------------------------------------------------
+
+// API FOR DELETING USER 
+
+router.delete('/user/:id', function(req, res) {
+  if (req.body.role === "admin") {
+  console.log('Deleting a user');
+  User.findByIdAndRemove(req.params.id, function(err, deletedUser) {
+      if(err) {
+          res.send('Error deleting user')
+      } else {
+          res.json(deletedUser)
+      }
+  });
+} else {
+  res.send("Only admin can delete user");
+}  
+});
+
+// -----------------------------------------------------------------------------
 
 module.exports = router;
