@@ -73,7 +73,7 @@ router.put('/pizza/:id', function(req, res) {
             }
         });
     } else {
-        res.send("Only admin can create pizza");
+        res.send("Only admin can update pizza");
     }      
 });
 
@@ -90,7 +90,7 @@ router.delete('/pizza/:id', function(req, res) {
         }
     });
 } else {
-    res.send("Only admin can create pizza");
+    res.send("Only admin can delete pizza");
 }  
 });
 
