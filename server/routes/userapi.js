@@ -81,13 +81,13 @@ router.post('/register', (req, res) => {
     }
   })
 })
-// ------------------------------------------------------
+// ------------------------------------------------------------------------
 
 // API FOR LOGIN
 
 router.post('/login', (req, res) => {
   let userData = req.body
-  User.findOne({username: userData.username}, (err, user) => {
+  User.findOne({name: userData.name}, (err, user) => {
     if (err) {
       console.log(err)    
     } else {
