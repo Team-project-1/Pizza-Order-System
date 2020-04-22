@@ -1,6 +1,25 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+
 const Pizza = require('../models/pizza');
+const User = require('../models/user');
+
+function verifyToken(req, res, next) {
+    if(!req.headers.authorization) {
+      return res.status(401).send('Unauthorized request')
+    }
+    let token = req.headers.authorization.split(' ')[1]
+    if(token === 'null') {
+      return res.status(401).send('Unauthorized request')    
+    }
+    let payload = jwt.verify(token, 'Pizza-Ordering-Systems-SecretKey')
+    if(!payload) {
+      return res.status(401).send('Unauthorized request')    
+    }
+    req.userId = payload.subject
+    next()
+  }
 
 // API for adding Pizza Information
 
@@ -11,7 +30,9 @@ router.post('/addpizza', (req, res) => {
             message: "Pizza content can not be empty"
         });
     }
-    if (req.body.role === "admin") {
+    let userRole = req.body
+    let user = new User(userRole.role)
+    if (user.role === "admin") {
         let pizzaData = req.body
   let pizza = new Pizza(pizzaData)
   pizza.save((err) => {
@@ -23,11 +44,11 @@ router.post('/addpizza', (req, res) => {
     } else {
         res.send("Only admin can create pizza");
     }  
-})
+});
 
 // API for getting information of all types of pizzas available in the store
 
-router.get('/allpizzas', function(req, res) {
+router.get('/allpizzas', verifyToken, function(req, res) {
     console.log('All pizzas info');
     Pizza.find()
     .then(pizzas => {
@@ -56,11 +77,13 @@ router.get('/pizza/:id', function(req, res) {
 // API for updating information of pizza
 
 router.put('/pizza/:id', function(req, res) {
-    if (req.body.role === "admin") {
+    let userRole = req.body
+    let user = new User(userRole.role)
+    if (user.role === "admin") {
         console.log("Update a pizza");
     Pizza.findByIdAndUpdate(req.params.id, 
         {
-            $set: {pizzaName: req.body.pizzaName, pizzaSize: req.body.pizzaSize, pizzaPrice: req.body.pizzaPrice}
+            $set: {pizzaName: req.body.pizzaName, pizzaSize: req.body.pizzaSize, pizzaPrice: req.body.pizzaPrice, pizzaImage: req.body.pizzaImage}
         },
         {
             new: true
@@ -80,7 +103,9 @@ router.put('/pizza/:id', function(req, res) {
 // Deleting pizza info with the specified pizzaId in the request
 
 router.delete('/pizza/:id', function(req, res) {
-    if (req.body.role === "admin") {
+    let userRole = req.body
+    let user = new User(userRole.role)
+    if (user.role === "admin") {
     console.log('Deleting a pizza');
     Pizza.findByIdAndRemove(req.params.id, function(err, deletedPizza) {
         if(err) {

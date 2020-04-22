@@ -14,6 +14,10 @@ const pizzaSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please mention price.'],
   },
+  pizzaImage: {
+    type: String,
+    required: [true, 'Please enter image url'],    
+  }
 });
 
 const Pizza = mongoose.model('Pizza', pizzaSchema);

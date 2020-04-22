@@ -1,14 +1,14 @@
   <div class="row mt-5">
     <div class="col-md-4 mb-3" *ngFor="let event of specialEvents">
       <div class="card text-center" style="width: 18rem;">
-        <img class="card-img-top" style="height: 250px;" src={{event.image}} alt="Card image cap">
+        <img class="card-img-top" style="height: 250px;" src={{event.pizzaImage}} alt="Card image cap">
         <div class="card-body">
-          <h5 class="card-title">{{event.name}}</h5>
-          <p class="card-text" style="font-weight: bolder;">{{event.size}}</p>
-          <a href="#" class="btn btn-primary">Buy</a>
+          <h5 class="card-title">{{event.pizzaName}}</h5>
+          <p class="card-text" style="font-weight: bolder;">{{event.pizzaSize}}</p>
+          <a href="#" class="btn btn-primary">Add to Cart</a>
         </div>
         <div class="card-footer text-muted" style="font-weight: bolder;">
-          {{event.price | currency:"INR"}}
+          {{event.pizzaPrice | currency:"INR"}}
         </div>
       </div>
     </div>

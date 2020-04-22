@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = require('../models/user');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 const db = 'mongodb+srv://amit230:Ajay230@database-rglvf.mongodb.net/test?retryWrites=true&w=majority';
 mongoose.Promise = global.Promise;
@@ -19,22 +19,6 @@ mongoose.connect(
       console.log("Database is connected");
     }
   );
-
-function verifyToken(req, res, next) {
-  if(!req.headers.authorization) {
-    return res.status(401).send('Unauthorized request')
-  }
-  let token = req.headers.authorization.split(' ')[1]
-  if(token === 'null') {
-    return res.status(401).send('Unauthorized request')    
-  }
-  let payload = jwt.verify(token, 'Pizza-Ordering-Systems-SecretKey')
-  if(!payload) {
-    return res.status(401).send('Unauthorized request')    
-  }
-  req.userId = payload.subject
-  next()
-}
 
 // API FOR RETREIVING USERS
 
@@ -88,12 +72,12 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
   let userData = req.body
-  User.findOne({name: userData.name, email: userData.email}, (err, user) => {
+  User.findOne({name: userData.name}, (err, user) => {
     if (err) {
       console.log(err)    
     } else {
       if (!user) {
-        res.status(401).send('Invalid name or email')
+        res.status(401).send('Invalid name')
       } else 
       if ( user.password !== userData.password) {
         res.status(401).send('Invalid Password')
@@ -110,9 +94,12 @@ router.post('/login', (req, res) => {
 // API FOR DELETING USER 
 
 router.delete('/user/:id', function(req, res) {
-  if (req.body.role === "admin") {
+  let userRole = req.body
+  let user = new User(userRole.role)
+  console.log(user.role);
+  if (user.role === "admin") {
   console.log('Deleting a user');
-  User.findByIdAndRemove(req.params.id, function(err, deletedUser) {
+  User.findByIdAndRemove(req.params.id, function(err, deletedUser) {    
       if(err) {
           res.send('Error deleting user')
       } else {
