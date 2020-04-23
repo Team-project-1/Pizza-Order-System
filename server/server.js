@@ -5,6 +5,7 @@ const path = require('path');
 
 const api = require('./routes/userapi');
 const pizza = require('./routes/pizzaapi');
+const topping = require('./routes/toppingapi');
 const order = require('./routes/orderapi');
 const port = 3000;
 
@@ -14,7 +15,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use(bodyParser.json()); 
 
-app.use('/api', api, pizza , order);
+app.use('/api', api, pizza, topping, order);
 
 app.listen(port, function(){
     console.log("Server running on localhost:" + port);

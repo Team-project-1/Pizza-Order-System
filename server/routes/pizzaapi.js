@@ -42,11 +42,11 @@ router.get('/allpizzas', function(req, res) {
 // API for getting information of particular pizza by id
 
 router.get('/pizza/:id', function(req, res) {
-    console.log('get request for a single pizza');
+    console.log('get request for a particular pizza');
     Pizza.findById(req.params.id)
     .exec(function(err, pizza) {
         if(err) {
-            console.log("Error retrieving pizza");
+            console.log("Error retrieving pizza info");
         } else {
             res.json(pizza)
         }
@@ -57,7 +57,7 @@ router.get('/pizza/:id', function(req, res) {
 
 router.put('/pizza/:id', function(req, res) {
     if (req.body.role === "admin") {
-        console.log("Update a pizza");
+        console.log("Update pizza info");
     Pizza.findByIdAndUpdate(req.params.id, 
         {
             $set: {pizzaName: req.body.pizzaName, pizzaSize: req.body.pizzaSize, pizzaPrice: req.body.pizzaPrice}
@@ -67,13 +67,13 @@ router.put('/pizza/:id', function(req, res) {
         },
         function(err, updatedPizza) {
             if(err) {
-                console.log("Error updating pizza")
+                console.log("Error updating pizza info")
             } else {
                 res.json(updatedPizza)
             }
         });
     } else {
-        res.send("Only admin can update pizza");
+        res.send("Only admin can update pizza info");
     }      
 });
 
@@ -84,13 +84,13 @@ router.delete('/pizza/:id', function(req, res) {
     console.log('Deleting a pizza');
     Pizza.findByIdAndRemove(req.params.id, function(err, deletedPizza) {
         if(err) {
-            res.send('Error deleting pizza')
+            res.send('Error deleting pizza info')
         } else {
             res.json(deletedPizza)
         }
     });
 } else {
-    res.send("Only admin can delete pizza");
+    res.send("Only admin can delete pizza info");
 }  
 });
 

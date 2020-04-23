@@ -12,7 +12,7 @@ const pizzaSchema = new mongoose.Schema({
   },
   pizzaPrice: {
     type: Number,
-    required: [true, 'Please mention price.'],
+    required: [true, 'Please mention pizza price.'],
   },
 });
 
