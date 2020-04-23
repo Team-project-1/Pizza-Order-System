@@ -4,13 +4,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router'
 
 @Component({
-  selector: 'app-special-events',
-  templateUrl: './special-events.component.html',
-  styleUrls: ['./special-events.component.css']
+  selector: 'app-home-page',
+  templateUrl: './home-page.component.html',
+  styleUrls: ['./home-page.component.css']
 })
-export class SpecialEventsComponent implements OnInit {
+export class HomePageComponent implements OnInit {
   
-  specialEvents = []
+  pizzaList = []
 
   constructor(private _eventService: EventService,
               private _router: Router) { }
@@ -19,7 +19,7 @@ export class SpecialEventsComponent implements OnInit {
   ngOnInit() {
     this._eventService.getSpecialEvents()
       .subscribe(
-        res => this.specialEvents = res,
+        res => this.pizzaList = res,
         err => {
           if( err instanceof HttpErrorResponse ) {
             if (err.status === 401) {

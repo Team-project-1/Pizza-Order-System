@@ -1,0 +1,15 @@
+  <div class="row mt-5">
+    <div class="col-md-4 mb-3" *ngFor="let list of pizzaList">
+      <div class="card text-center" style="width: 18rem;">
+        <img class="card-img-top" style="height: 250px;" src={{list.pizzaImage}} alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">{{list.pizzaName}}</h5>
+          <p class="card-text" style="font-weight: bolder;">{{list.pizzaSize}}</p>
+          <a href="#" class="btn btn-primary">Add to Cart</a>
+        </div>
+        <div class="card-footer text-muted" style="font-weight: bolder;">
+          {{list.pizzaPrice | currency:"INR"}}
+        </div>
+      </div>
+    </div>
+  </div>

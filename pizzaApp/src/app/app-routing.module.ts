@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component'
 import { RegisterComponent } from './register/register.component'
 import { EventsComponent } from './events/events.component';
-import { SpecialEventsComponent } from './special-events/special-events.component';
+import { HomePageComponent } from './home-page/home-page.component'
 import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
@@ -19,7 +19,7 @@ const routes: Routes = [
   {
     path: 'pizza',
     canActivate: [AuthGuard],
-    component: SpecialEventsComponent
+    component: HomePageComponent
   },
   {
     path: 'login',
