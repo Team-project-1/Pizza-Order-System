@@ -4,16 +4,16 @@ import { HttpClient } from '@angular/common/http'
 @Injectable()
 export class EventService {
 
-  private _eventsUrl = "http://localhost:3000/api/events";
   private _homePageUrl = "http://localhost:3000/api/allpizzas";
+  private _toppingList = "http://localhost:3000/api/alltoppings";
 
   constructor(private http: HttpClient) { }
 
-  getEvents() {
-    return this.http.get<any>(this._eventsUrl)
-  }
-
   getSpecialEvents() {
     return this.http.get<any>(this._homePageUrl)
+  }
+
+  getToppingList() {
+    return this.http.get<any>(this._toppingList)
   }
 }

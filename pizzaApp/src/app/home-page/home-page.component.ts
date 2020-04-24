@@ -11,6 +11,7 @@ import { Router } from '@angular/router'
 export class HomePageComponent implements OnInit {
   
   pizzaList = []
+  toppingList = []
 
   constructor(private _eventService: EventService,
               private _router: Router) { }
@@ -28,6 +29,15 @@ export class HomePageComponent implements OnInit {
           }
         }
       )
+
+      this._eventService.getToppingList()
+        .subscribe(
+          res => this.toppingList = res,
+        err => {
+          console.log(err)
+        }
+      )
+        
   }
 
 }
