@@ -7,6 +7,14 @@
           <p class="card-text" style="font-weight: bolder;">{{list.pizzaSize}}</p>
           <a href="#" class="btn btn-primary">Add to Cart</a>
         </div>
+          <form #userForm="ngForm">       
+            <div class="form-group">
+              <select class="custom-select">
+                <option value="default">Select Toppings</option>
+                <option *ngFor="let list of toppingList">{{list.toppingName}} ({{list.toppingPrice | currency:"INR"}})</option>
+              </select>
+            </div>
+          </form>
         <div class="card-footer text-muted" style="font-weight: bolder;">
           {{list.pizzaPrice | currency:"INR"}}
         </div>

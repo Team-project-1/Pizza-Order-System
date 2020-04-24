@@ -64,7 +64,7 @@ router.post('/register', (req, res) => {
   let user = new User(userData)
   user.save((err, registeredUser) => {
     if (err) {
-      console.log(err.errmsg)
+      console.log(err.message)
       res.send(err.errmsg)      
     } else {
       let payload = {subject: registeredUser._id}
