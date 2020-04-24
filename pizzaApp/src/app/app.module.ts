@@ -8,20 +8,21 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { EventsComponent } from './events/events.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { AuthService } from './auth.service';
 import { EventService } from './event.service';
 import { TokenInterceptorService } from './token-interceptor.service';
-
+import { OrderComponent } from './order/order.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    OrderComponent,
     RegisterComponent,
-    EventsComponent,
-    HomePageComponent
+    HomePageComponent,
+    OrderComponent,
+
   ],
   imports: [
     BrowserModule,
