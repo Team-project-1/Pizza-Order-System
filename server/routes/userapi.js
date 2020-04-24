@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+
+const User = require('../models/user');
 
 const db = 'mongodb+srv://amit230:Ajay230@database-rglvf.mongodb.net/test?retryWrites=true&w=majority';
 mongoose.Promise = global.Promise;
@@ -82,9 +83,10 @@ router.post('/login', (req, res) => {
       if ( user.password !== userData.password) {
         res.status(401).send('Invalid Password')
       } else {
-        let payload = {subject: user._id}
-        let token = jwt.sign(payload, 'Pizza-Ordering-Systems-SecretKey')
-        res.status(200).send({token})
+        let payload = {subject: user._id, role: user.role}
+        let token = jwt.sign(payload, "Pizza-Ordering-Systems-SecretKey")
+        console.log(token)
+        res.status(200).send({token, user})
       }
     }
   })
@@ -93,11 +95,8 @@ router.post('/login', (req, res) => {
 
 // API FOR DELETING USER 
 
-router.delete('/user/:id', function(req, res) {
-  let userRole = req.body
-  let user = new User(userRole.role)
-  console.log(user.role);
-  if (user.role === "admin") {
+router.delete('/user/:id', verifyToken, function(req, res) {
+  if (req.user === "admin") {
   console.log('Deleting a user');
   User.findByIdAndRemove(req.params.id, function(err, deletedUser) {    
       if(err) {
@@ -110,6 +109,29 @@ router.delete('/user/:id', function(req, res) {
   res.send("Only admin can delete user");
 }  
 });
+
+// -------------------------------------------------------------- 
+
+// MIDDLEWARE TO VERIFY TOKEN 
+
+function verifyToken(req, res, next) {
+  if(!req.headers.authorization) {
+    return res.status(401).send('Unauthorized request')
+  }
+  let token = req.headers.authorization.split(' ')[1]
+  if(token === 'null') {
+    return res.status(401).send('Unauthorized request')    
+  }
+  let payload = jwt.verify(token, 'Pizza-Ordering-Systems-SecretKey')
+  
+  if(!payload) {
+    return res.status(401).send('Unauthorized request')    
+  }
+  const user = User.findOne({ _id: payload.subject, 'tokens.token': token, 'role': payload.role })
+  req.userId = payload.subject  
+  req.user = payload.role
+  next()
+}
 
 // -----------------------------------------------------------------------------
 

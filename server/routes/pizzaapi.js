@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const Pizza = require('../models/pizza');
 const User = require('../models/user');
 
+// MIDDLEWARE TO VERIFY TOKEN 
+
 function verifyToken(req, res, next) {
     if(!req.headers.authorization) {
       return res.status(401).send('Unauthorized request')
@@ -14,25 +16,28 @@ function verifyToken(req, res, next) {
       return res.status(401).send('Unauthorized request')    
     }
     let payload = jwt.verify(token, 'Pizza-Ordering-Systems-SecretKey')
+    
     if(!payload) {
       return res.status(401).send('Unauthorized request')    
     }
-    req.userId = payload.subject
+    const user = User.findOne({ _id: payload.subject, 'tokens.token': token, 'role': payload.role })
+    req.userId = payload.subject  
+    req.user = payload.role
     next()
   }
+  
+  // -----------------------------------------------------------------------------
 
 // API for adding Pizza Information
 
-router.post('/addpizza', (req, res) => {
+router.post('/addpizza', verifyToken, (req, res) => {
 
     if(!req.body) {
         return res.status(400).send({
             message: "Pizza content can not be empty"
         });
     }
-    let userRole = req.body
-    let user = new User(userRole.role)
-    if (user.role === "admin") {
+    if (req.user === "admin") {
         let pizzaData = req.body
   let pizza = new Pizza(pizzaData)
   pizza.save((err) => {
@@ -42,9 +47,11 @@ router.post('/addpizza', (req, res) => {
     res.send('Pizza Added successfully')
   })
     } else {
-        res.send("Only admin can create pizza");
+        res.send("Only admin can add pizza");
     }  
 });
+
+// -------------------------------------------------------------------- 
 
 // API for getting information of all types of pizzas available in the store
 
@@ -60,6 +67,8 @@ router.get('/allpizzas', verifyToken, function(req, res) {
     })
 })
 
+// -------------------------------------------------------------------- 
+
 // API for getting information of particular pizza by id
 
 router.get('/pizza/:id', function(req, res) {
@@ -74,12 +83,12 @@ router.get('/pizza/:id', function(req, res) {
     })
 });
 
+// -------------------------------------------------------------------- 
+
 // API for updating information of pizza
 
-router.put('/pizza/:id', function(req, res) {
-    let userRole = req.body
-    let user = new User(userRole.role)
-    if (user.role === "admin") {
+router.put('/pizza/:id', verifyToken, function(req, res) {
+    if (req.user === "admin") {
         console.log("Update a pizza");
     Pizza.findByIdAndUpdate(req.params.id, 
         {
@@ -100,12 +109,12 @@ router.put('/pizza/:id', function(req, res) {
     }      
 });
 
+// -------------------------------------------------------------------- 
+
 // Deleting pizza info with the specified pizzaId in the request
 
-router.delete('/pizza/:id', function(req, res) {
-    let userRole = req.body
-    let user = new User(userRole.role)
-    if (user.role === "admin") {
+router.delete('/pizza/:id', verifyToken, function(req, res) {
+    if (req.user === "admin") {
     console.log('Deleting a pizza');
     Pizza.findByIdAndRemove(req.params.id, function(err, deletedPizza) {
         if(err) {
@@ -119,5 +128,6 @@ router.delete('/pizza/:id', function(req, res) {
 }  
 });
 
+// -------------------------------------------------------------------- 
 
 module.exports = router;
