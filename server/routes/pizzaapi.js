@@ -72,11 +72,11 @@ router.get('/allpizzas', verifyToken, function(req, res) {
 // API for getting information of particular pizza by id
 
 router.get('/pizza/:id', function(req, res) {
-    console.log('get request for a single pizza');
+    console.log('get request for a particular pizza');
     Pizza.findById(req.params.id)
     .exec(function(err, pizza) {
         if(err) {
-            console.log("Error retrieving pizza");
+            console.log("Error retrieving pizza info");
         } else {
             res.json(pizza)
         }
@@ -99,13 +99,13 @@ router.put('/pizza/:id', verifyToken, function(req, res) {
         },
         function(err, updatedPizza) {
             if(err) {
-                console.log("Error updating pizza")
+                console.log("Error updating pizza info")
             } else {
                 res.json(updatedPizza)
             }
         });
     } else {
-        res.send("Only admin can update pizza");
+        res.send("Only admin can update pizza info");
     }      
 });
 
@@ -118,13 +118,13 @@ router.delete('/pizza/:id', verifyToken, function(req, res) {
     console.log('Deleting a pizza');
     Pizza.findByIdAndRemove(req.params.id, function(err, deletedPizza) {
         if(err) {
-            res.send('Error deleting pizza')
+            res.send('Error deleting pizza info')
         } else {
             res.json(deletedPizza)
         }
     });
 } else {
-    res.send("Only admin can delete pizza");
+    res.send("Only admin can delete pizza info");
 }  
 });
 

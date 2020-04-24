@@ -1,25 +1,31 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
-const db = 'mongodb+srv://amit230:Ajay230@database-rglvf.mongodb.net/test?retryWrites=true&w=majority';
-mongoose.Promise = global.Promise;
+// MIDDLEWARE TO VERIFY TOKEN 
 
-//Connect to DB
-mongoose.connect(
-    db, {
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useFindAndModify: false,
-        useUnifiedTopology: true
-    },
-    () => {
-      console.log("Database is connected");
-    }
-  );
+function verifyToken(req, res, next) {
+  if(!req.headers.authorization) {
+    return res.status(401).send('Unauthorized request')
+  }
+  let token = req.headers.authorization.split(' ')[1]
+  if(token === 'null') {
+    return res.status(401).send('Unauthorized request')    
+  }
+  let payload = jwt.verify(token, 'Pizza-Ordering-Systems-SecretKey')
+  
+  if(!payload) {
+    return res.status(401).send('Unauthorized request')    
+  }
+  const user = User.findOne({ _id: payload.subject, 'tokens.token': token, 'role': payload.role })
+  req.userId = payload.subject  
+  req.user = payload.role
+  next()
+}
+
+// -----------------------------------------------------------------------------
 
 // API FOR RETREIVING USERS
 
@@ -111,28 +117,5 @@ router.delete('/user/:id', verifyToken, function(req, res) {
 });
 
 // -------------------------------------------------------------- 
-
-// MIDDLEWARE TO VERIFY TOKEN 
-
-function verifyToken(req, res, next) {
-  if(!req.headers.authorization) {
-    return res.status(401).send('Unauthorized request')
-  }
-  let token = req.headers.authorization.split(' ')[1]
-  if(token === 'null') {
-    return res.status(401).send('Unauthorized request')    
-  }
-  let payload = jwt.verify(token, 'Pizza-Ordering-Systems-SecretKey')
-  
-  if(!payload) {
-    return res.status(401).send('Unauthorized request')    
-  }
-  const user = User.findOne({ _id: payload.subject, 'tokens.token': token, 'role': payload.role })
-  req.userId = payload.subject  
-  req.user = payload.role
-  next()
-}
-
-// -----------------------------------------------------------------------------
 
 module.exports = router;
