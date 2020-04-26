@@ -12,14 +12,17 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { AuthService } from './auth.service';
 import { EventService } from './event.service';
 import { TokenInterceptorService } from './token-interceptor.service';
-
+import { OrderComponent } from './order/order.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    OrderComponent,
     RegisterComponent,
-    HomePageComponent
+    HomePageComponent,
+    OrderComponent,
+
   ],
   imports: [
     BrowserModule,
