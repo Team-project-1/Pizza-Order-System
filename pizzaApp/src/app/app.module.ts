@@ -12,17 +12,18 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { AuthService } from './auth.service';
 import { EventService } from './event.service';
 import { TokenInterceptorService } from './token-interceptor.service';
-import { OrderComponent } from './order/order.component';
+import { MycartComponent } from './mycart/mycart.component';
+import { OrderhistoryComponent } from './orderhistory/orderhistory.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    OrderComponent,
     RegisterComponent,
     HomePageComponent,
-    OrderComponent,
-
+    MycartComponent,
+    OrderhistoryComponent
   ],
   imports: [
     BrowserModule,

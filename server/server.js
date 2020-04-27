@@ -18,7 +18,9 @@ app.use(bodyParser.json());
 
 app.use('/api', api, pizza, topping, order);
 
-const db = 'mongodb+srv://amit230:Ajay230@database-rglvf.mongodb.net/test?retryWrites=true&w=majority'; 
+const db = 'mongodb+srv://amit230:Ajay230@database-rglvf.mongodb.net/test?retryWrites=true&w=majority';  //Amit
+
+// const db = "mongodb://localhost:27017/pizza-ordering-app";
 mongoose.Promise = global.Promise;
 
 //Connect to DB

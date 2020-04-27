@@ -10,8 +10,9 @@ import { Router } from '@angular/router'
 })
 export class HomePageComponent implements OnInit {
   
-  pizzaList = []
-  toppingList = []
+  pizzaList = [];
+  toppingList = [];
+  items = [];
 
   constructor(private _eventService: EventService,
               private _router: Router) { }
@@ -40,4 +41,11 @@ export class HomePageComponent implements OnInit {
         
   }
 
+  store($event) {
+    let result = this.pizzaList.map(({ pizzaName }) => pizzaName )
+    this.items.push(result);
+    localStorage.setItem("item", JSON.stringify(this.items));
+  }
+
 }
+

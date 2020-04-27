@@ -1,0 +1,22 @@
+<h2>My Cart</h2>
+<div class="container">
+<div class="row mt-5">
+  <h3>You have selected the following pizza with toppings</h3>
+  <div class="col-md-4 mb-3" *ngFor="let list of pizzaList">
+    <div class="card text-center" style="width: 18rem;">
+      <img class="card-img-top" style="height: 250px;" src="{{list.pizzaImage}}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Pizza Name: Fresh Veggie</h5>
+        <p class="card-text" style="font-weight: bolder;">small</p>
+      </div>
+      <div class="card-footer text-muted" style="font-weight: bolder;">
+        Topping Name: Golden Corn
+      </div>
+      <div class="card-footer text-muted" style="font-weight: bolder;">
+        Total Price: 156
+      </div>
+      <a routerLink="/orderhistory" class="btn btn-primary">Buy Now</a>
+    </div>
+  </div>
+</div>
+</div>
