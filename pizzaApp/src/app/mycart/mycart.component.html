@@ -1,22 +1,27 @@
-<h2>My Cart</h2>
-<div class="container">
-<div class="row mt-5">
-  <h3>You have selected the following pizza with toppings</h3>
-  <div class="col-md-4 mb-3" *ngFor="let list of pizzaList">
-    <div class="card text-center" style="width: 18rem;">
-      <img class="card-img-top" style="height: 250px;" src="{{list.pizzaImage}}" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Pizza Name: Fresh Veggie</h5>
-        <p class="card-text" style="font-weight: bolder;">small</p>
+<div class="container pt-2">
+  <h2 style="text-decoration: underline;">My Cart</h2>
+  <h3 class="mt-3">You have selected the following pizza with toppings</h3>
+  <div class="row mt-3" *ngFor="let list of pizzaList">
+    <div class="col-md-7">
+      <h5>Pizza Name: {{list.pizzaName | uppercase}}</h5>
+      <h5>Size: {{list.pizzaSize}}</h5>
+      <h5>
+        Want to add toppings? Select toppings from the dropdown list below:
+      </h5>
+      <div class="form-group">
+        <select class="custom-select" (change)="onChange($event)">
+          <option value="default">Select Toppings</option>
+          <option *ngFor="let list of toppingList">{{list.toppingName}} ({{list.toppingPrice | currency:"INR"}})</option>
+        </select>
       </div>
-      <div class="card-footer text-muted" style="font-weight: bolder;">
-        Topping Name: Golden Corn
-      </div>
-      <div class="card-footer text-muted" style="font-weight: bolder;">
-        Total Price: 156
-      </div>
-      <a routerLink="/orderhistory" class="btn btn-primary">Buy Now</a>
+      <h5>
+        Total Price: {{list.pizzaPrice | currency:"INR"}}
+      </h5>
+      <a routerLink="/orderhistory" class="btn btn-primary mt-5">Buy Now</a>
+    </div>
+    <div class="col-md-5 text-center">
+      <img style="height: 250px;" src="{{list.pizzaImage}}" alt="Card image cap"><br/>
+      
     </div>
   </div>
-</div>
 </div>

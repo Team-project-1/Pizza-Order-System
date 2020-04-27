@@ -11,7 +11,6 @@ import { Router } from '@angular/router'
 export class HomePageComponent implements OnInit {
   
   pizzaList = [];
-  toppingList = [];
   items = [];
 
   constructor(private _eventService: EventService,
@@ -30,22 +29,16 @@ export class HomePageComponent implements OnInit {
           }
         }
       )
-
-      this._eventService.getToppingList()
-        .subscribe(
-          res => this.toppingList = res,
-        err => {
-          console.log(err)
-        }
-      )
         
   }
 
-  store($event) {
-    let result = this.pizzaList.map(({ pizzaName }) => pizzaName )
-    this.items.push(result);
-    localStorage.setItem("item", JSON.stringify(this.items));
+  store(_id) {
+    // let pizzaItem = this.pizzaList.find(item => item.id === _id)
+    this.items = _id   
+    localStorage.setItem("pizza", JSON.stringify(this.items));
   }
 
+
 }
+
 
